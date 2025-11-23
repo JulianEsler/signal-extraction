@@ -1,0 +1,7 @@
+Model_Component,Model_Fit,Model_Evaluation_1,Evaluation_Value_1,Model_Evaluation_2,Evaluation_Value_2
+signal_freq,Expon,KS Test,0.4132841336591794,p_val,5.0192517552272075e-11
+signal,Expon,KS Test,0.4083889312786339,p_val,1.8245030958088572e-10
+intensity,Expon,KS Test,0.4188908798159312,p_val,5.218495773376748e-11
+duration,Expon,Chi-Squared Test,7.491646743752686,p_val,0.3795423319408778
+frequency,Poisson,Chi-Squared Test,25.853565157727544,p_val,9.52643805133774e-05
+Forecast_Model,"ARIMA((2, 0, 1))",AIC,-1674.589798737694,BIC,-1659.060071368191
