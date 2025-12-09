@@ -257,22 +257,25 @@ def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp',
         data_max  = torch.tensor(scaler.data_max_,  dtype=torch.float32, device=device)
         return x_scaled * (data_max - data_min) + data_min
 
-    def gamma_nll(y_true, y_pred, shape=0.5, eps=1e-6):
+    def gamma_nll(y_true, mu, shape=0.5, eps=1e-6):
         """
-        Gamma negative log likelihood.
-        Must operate on raw-precip Torch tensors.
+        Gamma NLL where mu is the predicted mean.
+        scale θ = mu / shape
+        rate β = shape / mu
         """
         y_true = torch.clamp(y_true, min=eps)
-        y_pred = torch.clamp(y_pred, min=eps)
-
-        rate = shape / y_pred  # β = k / μ
-
+        mu     = torch.clamp(mu,     min=eps)
+    
+        rate = shape / mu  # β
+    
+        # NLL = logΓ(k) - k log β - (k-1) log y + β y
         nll = (
             torch.lgamma(torch.tensor(shape, device=y_true.device))
             - shape * torch.log(rate)
-            + (shape - 1) * torch.log(y_true)
+            - (shape - 1) * torch.log(y_true)
             + rate * y_true
         )
+    
         return nll.mean()
 
     # ======================================================

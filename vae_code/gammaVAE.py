@@ -251,7 +251,7 @@ class MIMOVAE(nn.Module):
 '''
 Defining the training function
 '''
-def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp',
+def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp', gshape=1, grate=1,
           train_pct=0.8, batch=32, epochs=100, verbose=True):
 
     # -------------------------------
@@ -311,8 +311,8 @@ def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp',
     # KL TERM: Gamma posterior vs Gamma prior
     # -------------------------------
     # Prior parameters (can be tuned)
-    prior_alpha = torch.tensor(1.0, device=device)  # shape
-    prior_beta = torch.tensor(1.0, device=device)   # rate
+    prior_alpha = torch.tensor(gshape, device=device)  # shape
+    prior_beta = torch.tensor(grate, device=device)   # rate
 
     def gamma_kl(alpha_q, beta_q, alpha_p, beta_p):
         """
