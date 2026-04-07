@@ -251,7 +251,7 @@ class MIMOVAE(nn.Module):
 '''
 Defining the training function
 '''
-def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp', gshape=1, grate=1,
+def learn(sst_dat, precip_dat, norm, sst_var='sst', precip_var='tp', gshape=1, grate=2,
           train_pct=0.8, batch=32, epochs=100, verbose=True):
 
     # -------------------------------

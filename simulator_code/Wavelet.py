@@ -227,7 +227,7 @@ def reconstruct(WT, series_data, dj=0.025, lvl=0, only_coi=True, only_sig=True, 
     return x_r, non_masked_values
     
 
-def wavelet_plot(plt_dataset, siglvl, name = '', sigtest = 'default'):
+def wavelet_plot(plt_dataset, siglvl, name = '', sigtest = 'default', midpoint_color = '#6699CC', end_color = '#004488'):
     """
     Plot the wavelet power spectrum and the global wavelet spectrum of a time series. This function creates a comprehensive visualization of the wavelet analysis results, facilitating the examination of periodicities in the data and their significance against specified noise models.
 
@@ -243,9 +243,9 @@ def wavelet_plot(plt_dataset, siglvl, name = '', sigtest = 'default'):
     gs = gridspec.GridSpec(1, 4, width_ratios=[0.1, 2, 1, 0.1], wspace=0.1)
     
     # Define the start and end colors for your palette
-    start_color = '#FFFFFF'
-    midpoint_color = '#6699CC'  # White as the neutral midpoint color
-    end_color = '#004488'
+    start_color = 'white'
+    #midpoint_color = '#6699CC'  # White as the neutral midpoint color
+    #end_color = '#004488'
     
     # Create the custom diverging palette
     custom_palette = sns.blend_palette([start_color, midpoint_color, end_color], as_cmap=True)
@@ -300,7 +300,7 @@ def wavelet_plot(plt_dataset, siglvl, name = '', sigtest = 'default'):
     ax_global.set_yticks(y_ticks)  # Set y-ticks to be powers of two
     ax_global.set_yticklabels([str(y) for y in y_ticks])  # Use the actual numbers as labels
 
-    fig.suptitle(f'{name} Gauge', fontsize=17)
+    fig.suptitle(f'{name} Wavelet', fontsize=17)
     plt.legend(fontsize=14)
     plt.show()
 

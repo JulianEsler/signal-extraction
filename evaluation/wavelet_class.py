@@ -289,15 +289,32 @@ class WaveletAnalyzer:
 
         time = plt_dataset["Time"]
         cs = ax_cwt.contourf(time, np.log2(plt_dataset["Period"]), plt_dataset["Power"], levels=levels, cmap=custom_palette)
-
-        ax_cwt.plot(np.arange(time[0], time[0] + len(plt_dataset["COI"]), 1), np.log2(plt_dataset["COI"]), "k")
+        '''
+        edits to try to fix no COI plotting. Removed below code:
+                ax_cwt.plot(np.arange(time[0], time[0] + len(plt_dataset["COI"]), 1), np.log2(plt_dataset["COI"]), "k")
+                ax_cwt.fill_between(
+                    np.arange(time[0], time[0] + len(plt_dataset["COI"]), 1),
+                    np.log2(plt_dataset["COI"]),
+                    np.log2(plt_dataset["Period"][-1]),
+                    color="gray",
+                    alpha=0.5,
+                )
+        '''
+        coi_plot = np.asarray(plt_dataset["COI"], dtype=float)
+        coi_plot[coi_plot <= 0] = np.nan
+        coi_plot = np.log2(coi_plot)
+        
+        ax_cwt.plot(time, coi_plot, "k", linewidth=1.5)
+        
         ax_cwt.fill_between(
-            np.arange(time[0], time[0] + len(plt_dataset["COI"]), 1),
-            np.log2(plt_dataset["COI"]),
+            time,
+            coi_plot,
             np.log2(plt_dataset["Period"][-1]),
             color="gray",
             alpha=0.5,
         )
+        ''' end of modified code '''
+
         ax_cwt.set_title("Local Wavelet Power Spectrum", fontsize=15)
         ax_cwt.set_ylabel("Period (Years)", fontsize=14)
         ax_cwt.set_xlabel("Time (Year)", fontsize=14)
@@ -326,7 +343,28 @@ class WaveletAnalyzer:
         ax_global.tick_params(axis="both", which="major", labelsize=13)
         ax_global.set_yscale("log", base=2)
         ax_global.invert_yaxis()
-        ax_global.set_xlim([0, 20])
+        #ax_global.set_xlim([0, 20])
+        '''
+        updated xlim for global power spectrum
+        '''
+        global_curves = [plt_dataset["Avg_Power"]]
+
+        if sigtest == "red":
+            global_curves.append(plt_dataset["R_noise"])
+        elif sigtest == "white":
+            global_curves.append(plt_dataset["W_noise"])
+        else:
+            global_curves.extend([plt_dataset["R_noise"], plt_dataset["W_noise"]])
+        
+        xmax = np.nanmax([np.nanmax(curve) for curve in global_curves])
+        
+        # fallback in case everything is zero or non-finite
+        if not np.isfinite(xmax) or xmax <= 0:
+            xmax = 1
+        ax_global.set_xlim(0, xmax * 1.1)
+        '''
+        end of modified code
+        '''
         ax_global.set_ylim([32, 2.1])
         y_ticks = [2**x for x in range(2, 6)]
         ax_global.set_yticks(y_ticks)

@@ -1235,7 +1235,7 @@ def fit_intensity_distribution(list_of_peaks, intensity_dist, plot_RV, name, n_s
         intensity_params = {'gamma_alpha': alpha, 'gamma_loc': loc, 'scale': beta}
         distribution_func = gamma
     else:  # Default to Exponential
-        loc, scale = expon.fit(list_of_peaks, floc=0)
+        loc, scale = expon.fit(list_of_peaks) #note: removed floc = 0 from params
         intensity_params = {'expon_loc': loc, 'scale': scale}
         distribution_func = expon
         intensity_dist = "Expon"
