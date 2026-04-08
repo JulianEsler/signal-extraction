@@ -214,7 +214,8 @@ class MIMOVAE(nn.Module):
         self.shared_hidden = nn.Linear(20, 10)
 
         # --- Variational heads: alpha, beta for Gamma posterior ---
-        # Use Softplus to ensure positivity
+            # Note: softplus is used to ensure positivity of the learned distribution parameters because 
+            # passing negative values to the reparametrization function would create errors. 
         self.alpha_head = nn.Sequential(
             nn.Linear(10, latent_dim),
             nn.Softplus()
